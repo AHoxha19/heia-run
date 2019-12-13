@@ -1,6 +1,8 @@
+import random
 from settings import *
 import pygame as pg
 from player import *
+
 
 class Game:
 
@@ -12,6 +14,15 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
+
+        self.backgrounds = dict()
+        self.load_backgrounds()
+
+    def load_backgrounds(self):
+        self.backgrounds['bg1'] = pg.transform.scale(pg.image.load('img/bg1.png'), (11900, 460))
+
+    def draw_background(self, background_name):
+        self.screen.blit(self.backgrounds[background_name], (0, 0))
 
     def new(self):
         # starts a new game
@@ -42,7 +53,7 @@ class Game:
 
     def draw(self):
         # Game loop - draw
-        self.screen.fill(BLACK)
+        self.draw_background('bg1')
         self.all_sprites.draw(self.screen)
         # after we draw everything, flip the display
         # sample with whiteboard

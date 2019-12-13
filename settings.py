@@ -1,7 +1,7 @@
 #game options/settings
 TITLE = "HEIA Run"
-WIDTH = 360
-HEIGHT = 480
+WIDTH = 1000
+HEIGHT = 460
 FPS = 30
 
 
