@@ -1,6 +1,6 @@
-import random
 from settings import *
 import pygame as pg
+from player import *
 
 class Game:
 
@@ -16,6 +16,9 @@ class Game:
     def new(self):
         # starts a new game
         self.all_sprites = pg.sprite.Group()
+        self.player = Player()
+        self.all_sprites.add(self.player)
+        self.run()
 
     def run(self):
         # Game loop
@@ -39,7 +42,7 @@ class Game:
 
     def draw(self):
         # Game loop - draw
-        self.screen.fill(BLUE)
+        self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
         # after we draw everything, flip the display
         # sample with whiteboard
