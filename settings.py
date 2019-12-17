@@ -2,13 +2,13 @@
 TITLE = "HEIA Run"
 WIDTH = 1000
 HEIGHT = 460
-FPS = 30
-
+FPS = 60
+BACKGROUND_WIDTH = 11900
 
 #Player properties
 PLAYER_ACC = 1
-PLAYER_FRICTION = -0.05
-
+PLAYER_FRICTION = -0.1
+MID_TOL = 5 # tolerance to what we consider as the middle
 
 #define colors
 WHITE = (255,255,255)

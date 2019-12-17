@@ -5,7 +5,6 @@ from player import *
 
 
 class Game:
-
     def __init__(self):
         pg.init()
         pg.mixer.init()
@@ -17,17 +16,19 @@ class Game:
 
         self.backgrounds = dict()
         self.load_backgrounds()
+        self.x_progression = 0
 
     def load_backgrounds(self):
-        self.backgrounds['bg1'] = pg.transform.scale(pg.image.load('img/bg1.png'), (11900, 460))
+        self.backgrounds['bg1'] = pg.transform.scale(pg.image.load('img/bg1.png').convert(), (BACKGROUND_WIDTH, HEIGHT))
 
     def draw_background(self, background_name):
-        self.screen.blit(self.backgrounds[background_name], (0, 0))
+        self.screen.blit(self.backgrounds[background_name].subsurface(
+            self.x_progression, 0, BACKGROUND_WIDTH - self.x_progression, HEIGHT), (0, 0))
 
     def new(self):
         # starts a new game
         self.all_sprites = pg.sprite.Group()
-        self.player = Player()
+        self.player = Player(self)
         self.all_sprites.add(self.player)
         self.run()
 

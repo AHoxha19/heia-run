@@ -3,9 +3,11 @@ import pygame as pg
 from settings import *
 vec = pg.math.Vector2
 
+
 class Player(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, game):
         pg.sprite.Sprite.__init__(self)
+        self.game = game
         self.image = pg.Surface((30, 40))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
@@ -13,6 +15,10 @@ class Player(pg.sprite.Sprite):
         self.pos = vec(WIDTH / 2, HEIGHT / 2)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+
+    # if smaller than 0 left, else right, if 0 middle
+    def compare_x_to_middle(self):
+        return self.pos.x - WIDTH/2
 
     def update(self):
         self.acc = vec(0, 0)
@@ -26,11 +32,15 @@ class Player(pg.sprite.Sprite):
         self.acc += self.vel * PLAYER_FRICTION
         # equations of motion
         self.vel += self.acc
-        self.pos += self.vel + 0.5 * self.acc
-        # wrap around the sides of the screen
-        if self.pos.x > WIDTH:
-            self.pos.x = 0
-        if self.pos.x < 0:
-            self.pos.x = WIDTH
+
+        new_pos = self.vel + 0.5 * self.acc
+        new_game_progression = self.game.x_progression + new_pos.x
+
+        if 0 < new_game_progression < BACKGROUND_WIDTH - WIDTH and -MID_TOL < self.pos.x - WIDTH/2 < MID_TOL:
+            self.game.x_progression += new_pos.x
+        else:
+            new_pos = self.vel + 0.5 * self.acc
+            if 0 < (self.pos + new_pos).x < WIDTH:
+                self.pos += new_pos
 
         self.rect.center = self.pos
