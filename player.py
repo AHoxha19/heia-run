@@ -16,10 +16,6 @@ class Player(pg.sprite.Sprite):
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
-    # if smaller than 0 left, else right, if 0 middle
-    def compare_x_to_middle(self):
-        return self.pos.x - WIDTH/2
-
     def update(self):
         self.acc = vec(0, 0)
         keys = pg.key.get_pressed()

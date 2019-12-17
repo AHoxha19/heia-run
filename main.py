@@ -2,6 +2,7 @@ import random
 from settings import *
 import pygame as pg
 from player import *
+from monster import *
 
 
 class Game:
@@ -29,7 +30,9 @@ class Game:
         # starts a new game
         self.all_sprites = pg.sprite.Group()
         self.player = Player(self)
+        self.monsters = [Monster(self) for x in range(3)]
         self.all_sprites.add(self.player)
+        self.all_sprites.add(self.monsters)
         self.run()
 
     def run(self):
