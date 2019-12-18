@@ -17,3 +17,10 @@ GREEN = (0,255,0)
 BLUE = (0,0,255)
 YELLOW = (255,255,0)
 
+#Blocks properties
+BLOCK_WIDTH = 209
+BLOCK_HEIGHT = 208
+
+#Paths
+IMG_BLOCK_PATH = './img/blocks/'
+

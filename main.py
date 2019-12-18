@@ -4,6 +4,7 @@ import pygame as pg
 from player import *
 from monster import *
 from world import *
+from block import *
 
 
 class Game:
@@ -17,16 +18,26 @@ class Game:
         self.running = True
 
         self.backgrounds = list()
+        self.block_name = "snow_grass.png"
+        self.blocks = list()
         self.world_number = 0
         self.load_backgrounds()
+        self.load_blocks()
         self.x_progression = 0
 
     def get_current_bg(self):
         return self.backgrounds[self.world_number]
 
     def load_backgrounds(self):
-        self.backgrounds.append(World(path='img/bg1.png', game_width=12920))
-        self.backgrounds.append(World(path='img/mountain.png', game_width=12920))
+        self.backgrounds.append(World(path='img/bg/biblio.png', game_width=12920))
+        self.backgrounds.append(World(path='img/bg/mountain.png', game_width=12920))
+        self.backgrounds.append(World(path='img/bg/city.png', game_width=12920))
+        self.backgrounds.append(World(path='img/bg/forest.png', game_width=12920))
+        self.backgrounds.append(World(path='img/bg/snow.png', game_width=12920))
+
+    def load_blocks(self):
+        self.blocks.append(Block(self.block_name, False))
+
 
     def draw_background(self):
         bg = self.backgrounds[self.world_number]
@@ -40,6 +51,7 @@ class Game:
         self.monsters = [Monster(self) for x in range(10)]
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.monsters)
+        self.all_sprites.add(self.blocks[0])
         self.run()
 
     def run(self):
