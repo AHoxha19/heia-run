@@ -19,8 +19,7 @@ class Game:
 
         self.backgrounds = list()
         self.block_name = "snow_grass.png"
-        self.blocks = list()
-        self.world_number = 0
+        self.world_number = 1
         self.load_backgrounds()
         self.load_blocks()
         self.x_progression = 0
@@ -38,11 +37,8 @@ class Game:
     def load_blocks(self):
         self.blocks.append(Block(self.block_name, False))
 
-
     def draw_background(self):
-        bg = self.backgrounds[self.world_number]
-        self.screen.blit(bg.image.subsurface(
-            self.x_progression, 0, bg.background_width - self.x_progression, HEIGHT), (0, 0))
+        self.backgrounds[self.world_number].draw(self)
 
     def new(self):
         # starts a new game
