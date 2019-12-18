@@ -3,7 +3,6 @@ TITLE = "HEIA Run"
 WIDTH = 1000
 HEIGHT = 460
 FPS = 60
-BACKGROUND_WIDTH = 11900
 
 #Player properties
 PLAYER_ACC = 1
@@ -17,3 +16,4 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0,0,255)
 YELLOW = (255,255,0)
+

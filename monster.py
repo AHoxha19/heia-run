@@ -14,7 +14,7 @@ class Monster(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.pos = vec(-200, HEIGHT / 2)
-        self.pos_in_game = vec(random.randint(0, BACKGROUND_WIDTH), HEIGHT / 2)
+        self.pos_in_game = vec(random.randint(0, self.game.get_current_bg().game_width), HEIGHT / 2)
 
     def update(self):
         self.pos_in_game -= (1, 0)

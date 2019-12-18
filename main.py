@@ -3,6 +3,7 @@ from settings import *
 import pygame as pg
 from player import *
 from monster import *
+from world import *
 
 
 class Game:
@@ -15,16 +16,22 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
 
-        self.backgrounds = dict()
+        self.backgrounds = list()
+        self.world_number = 0
         self.load_backgrounds()
         self.x_progression = 0
 
-    def load_backgrounds(self):
-        self.backgrounds['bg1'] = pg.transform.scale(pg.image.load('img/bg1.png').convert(), (BACKGROUND_WIDTH, HEIGHT))
+    def get_current_bg(self):
+        return self.backgrounds[self.world_number]
 
-    def draw_background(self, background_name):
-        self.screen.blit(self.backgrounds[background_name].subsurface(
-            self.x_progression, 0, BACKGROUND_WIDTH - self.x_progression, HEIGHT), (0, 0))
+    def load_backgrounds(self):
+        self.backgrounds.append(World(path='img/bg1.png', game_width=12920))
+        self.backgrounds.append(World(path='img/mountain.png', game_width=12920))
+
+    def draw_background(self):
+        bg = self.backgrounds[self.world_number]
+        self.screen.blit(bg.image.subsurface(
+            self.x_progression, 0, bg.background_width - self.x_progression, HEIGHT), (0, 0))
 
     def new(self):
         # starts a new game
@@ -57,7 +64,7 @@ class Game:
 
     def draw(self):
         # Game loop - draw
-        self.draw_background('bg1')
+        self.draw_background()
         self.all_sprites.draw(self.screen)
         # after we draw everything, flip the display
         # sample with whiteboard

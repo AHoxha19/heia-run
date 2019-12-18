@@ -31,8 +31,9 @@ class Player(pg.sprite.Sprite):
 
         new_pos = self.vel + 0.5 * self.acc
         new_game_progression = self.game.x_progression + new_pos.x
+        game_width = self.game.get_current_bg().game_width
 
-        if 0 < new_game_progression < BACKGROUND_WIDTH - WIDTH and -MID_TOL < self.pos.x - WIDTH/2 < MID_TOL:
+        if 0 < new_game_progression < game_width - WIDTH and -MID_TOL < self.pos.x - WIDTH/2 < MID_TOL:
             self.game.x_progression += new_pos.x
         else:
             new_pos = self.vel + 0.5 * self.acc
