@@ -30,7 +30,7 @@ class Game:
         # starts a new game
         self.all_sprites = pg.sprite.Group()
         self.player = Player(self)
-        self.monsters = [Monster(self) for x in range(3)]
+        self.monsters = [Monster(self) for x in range(10)]
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.monsters)
         self.run()
