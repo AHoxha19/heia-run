@@ -18,8 +18,9 @@ BLUE = (0,0,255)
 YELLOW = (255,255,0)
 
 #Blocks properties
-BLOCK_WIDTH = 209
-BLOCK_HEIGHT = 208
+BLOCK_WIDTH = 79
+BLOCK_HEIGHT = 79
+HOLES_PROB = 10 # percent
 
 #Paths
 IMG_BLOCK_PATH = './img/blocks/'

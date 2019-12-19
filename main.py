@@ -16,12 +16,11 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
-
         self.backgrounds = list()
-        self.block_name = "snow_grass.png"
-        self.world_number = 1
+        self.world_number = 3
+        
         self.load_backgrounds()
-        self.load_blocks()
+        self.blocks = self.backgrounds[self.world_number].load_blocks(self)
         self.x_progression = 0
 
     def get_current_bg(self):
@@ -29,13 +28,10 @@ class Game:
 
     def load_backgrounds(self):
         self.backgrounds.append(World(path='img/bg/biblio.png', game_width=12920))
-        self.backgrounds.append(World(path='img/bg/mountain.png', game_width=12920))
-        self.backgrounds.append(World(path='img/bg/city.png', game_width=12920))
         self.backgrounds.append(World(path='img/bg/forest.png', game_width=12920))
+        self.backgrounds.append(World(path='img/bg/mountain.png', game_width=12920))
         self.backgrounds.append(World(path='img/bg/snow.png', game_width=12920))
-
-    def load_blocks(self):
-        self.blocks.append(Block(self.block_name, False))
+        self.backgrounds.append(World(path='img/bg/city.png', game_width=12920))
 
     def draw_background(self):
         self.backgrounds[self.world_number].draw(self)
@@ -47,7 +43,9 @@ class Game:
         self.monsters = [Monster(self) for x in range(10)]
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.monsters)
-        self.all_sprites.add(self.blocks[0])
+        for block in self.blocks:
+            if not block.isHole:
+                self.all_sprites.add(block)
         self.run()
 
     def run(self):
