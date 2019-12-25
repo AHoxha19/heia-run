@@ -12,11 +12,11 @@ class Monster(pg.sprite.Sprite):
         self.image = pg.Surface((30, 40))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self.pos = vec(-200, HEIGHT / 2)
-        self.pos_in_game = vec(random.randint(0, self.game.get_current_bg().game_width), HEIGHT / 2)
+        self.rect.center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2)
+        self.pos = vec(-200, DISPLAY_HEIGHT / 2)
+        self.pos_in_game = vec(random.randint(0, self.game.get_current_bg().game_width), DISPLAY_HEIGHT / 2)
 
     def update(self):
         self.pos_in_game -= (1, 0)
-        self.pos.x = self.pos_in_game.x - self.game.x_progression
+        self.pos.x = self.pos_in_game.x - self.game.player.pos.x
         self.rect.center = self.pos

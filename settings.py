@@ -1,13 +1,17 @@
 #game options/settings
 TITLE = "HEIA Run"
-WIDTH = 800
-HEIGHT = 460
+DISPLAY_WIDTH = 800
+DISPLAY_HEIGHT = 460
+STAGE_WIDTH = 12920
+START_SCROLL_X = DISPLAY_WIDTH / 2
 FPS = 60
 
 #Player properties
 PLAYER_ACC = 1
-PLAYER_FRICTION = -0.1
-MID_TOL = 5 # tolerance to what we consider as the middle
+PLAYER_FRICTION = -0.12
+PLAYER_GRAV = 0.98
+PLAYER_JUMP = 20 #velocity the player jump 
+PLAYER_SMALL_JUMP = 5 #velocity if we release the K_UP early
 
 #define colors
 WHITE = (255,255,255)
