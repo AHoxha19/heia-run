@@ -12,6 +12,10 @@ PLAYER_FRICTION = -0.12
 PLAYER_GRAV = 0.98
 PLAYER_JUMP = 20 #velocity the player jump 
 PLAYER_SMALL_JUMP = 5 #velocity if we release the K_UP early
+#Sprite
+
+PLAYER_WIDTH = 80 
+PLAYER_HEIGHT = 80 
 
 #define colors
 WHITE = (255,255,255)
@@ -28,4 +32,5 @@ HOLES_PROB = 10 # percent
 
 #Paths
 IMG_BLOCK_PATH = './img/blocks/'
+IMG_PLAYER_PATH = './img/player/'
 
