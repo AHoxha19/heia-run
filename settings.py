@@ -17,6 +17,9 @@ PLAYER_SMALL_JUMP = 5 #velocity if we release the K_UP early
 PLAYER_WIDTH = 80 
 PLAYER_HEIGHT = 80 
 
+BULLET_WIDTH = 20
+BULLET_HEIGHT = 20
+
 #define colors
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -33,4 +36,6 @@ HOLES_PROB = 10 # percent
 #Paths
 IMG_BLOCK_PATH = './img/blocks/'
 IMG_PLAYER_PATH = './img/player/'
+IMG_BULLET_PATH = './img/bullets/'
+IMG_MONSTER_PATH = './img/monsters/'
 

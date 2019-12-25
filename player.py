@@ -16,6 +16,9 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (DISPLAY_WIDTH / 2 - 100, DISPLAY_HEIGHT / 2)
 
+        
+        self.throws = False
+
         # position, velocity,acceleration and movement of the player
         self.pos = vec(DISPLAY_WIDTH / 2 - 100, DISPLAY_HEIGHT / 2)
         self.vel = vec(0, 0)
@@ -25,18 +28,21 @@ class Player(pg.sprite.Sprite):
         self.player_center = self.rect.width / 2
         self.world = game.backgrounds[game.world_number]
 
-
-    def get_image(self, img_name):
-        return pg.transform.scale(pg.image.load(IMG_PLAYER_PATH + img_name).convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
+    def throw_bullet(self):
+        if not self.throws: 
+            self.bullet = Bullet(self.game, self)
+            self.throws = True
+    def get_image(self, path, img_name):
+        return pg.transform.scale(pg.image.load(path + img_name).convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
 
     def load_images(self):
-        self.standing_frame = self.get_image('asterix_0.gif')
-        self.jump_frame_r = self.get_image('asterix_jump.gif')
+        self.standing_frame = self.get_image(IMG_PLAYER_PATH, 'asterix_0.gif')
+        self.jump_frame_r = self.get_image(IMG_PLAYER_PATH, 'asterix_jump.gif')
         self.jump_frame_l = pg.transform.flip(self.jump_frame_r, True, False)
-        self.walk_frame_r = [self.get_image('asterix_1.gif'),
-                           self.get_image('asterix_2.gif'),
-                           self.get_image('asterix_3.gif'),
-                           self.get_image('asterix_4.gif')
+        self.walk_frame_r = [self.get_image(IMG_PLAYER_PATH, 'asterix_1.gif'),
+                           self.get_image(IMG_PLAYER_PATH, 'asterix_2.gif'),
+                           self.get_image(IMG_PLAYER_PATH, 'asterix_3.gif'),
+                           self.get_image(IMG_PLAYER_PATH, 'asterix_4.gif')
                           ]
         self.walk_frame_l = []
         for frame in self.walk_frame_r:
@@ -58,12 +64,13 @@ class Player(pg.sprite.Sprite):
         self.animate()
         self.acc = vec(0, PLAYER_GRAV)
         keys = pg.key.get_pressed()
+        if keys[pg.K_UP]:
+            self.jump()
         if keys[pg.K_LEFT]:
             self.acc.x = -PLAYER_ACC
         if keys[pg.K_RIGHT]:
             self.acc.x = PLAYER_ACC
-        if keys[pg.K_UP]:
-            self.jump()
+        
 
         # apply friction
         self.acc += self.vel * PLAYER_FRICTION
@@ -100,7 +107,7 @@ class Player(pg.sprite.Sprite):
 
     def animate(self):
             now = pg.time.get_ticks()
-            if self.vel.x != 0:
+            if self.vel.x != 0 and not self.jumping:
                 self.walking = True
             else:
                 self.walking = False
@@ -126,3 +133,37 @@ class Player(pg.sprite.Sprite):
             if not self.jumping and not self.walking:
                 self.image = self.standing_frame
                 self.rect = self.image.get_rect()            
+
+class Bullet(pg.sprite.Sprite):
+    def __init__(self, game, player):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+        self.player = player
+        self.last_player_vel_x = self.player.vel.x
+        self.image = pg.image.load(IMG_BULLET_PATH + 'bullet.gif').convert()
+        self.image = pg.transform.scale(self.image, (BULLET_WIDTH, BULLET_HEIGHT))
+        self.rect = self.image.get_rect()
+        self.game.all_sprites.add(self)
+        self.rect.center = self.player.rect.center
+            
+    def move_bullet(self):
+        
+        self.collision = pg.sprite.spritecollide(self, self.game.monsters, False)
+        if not self.collision and (self.rect.x < DISPLAY_WIDTH and self.rect.x > 0):
+               if self.last_player_vel_x < 0:
+                    self.rect.x -= 10
+               else:
+                   self.rect.x += 10
+        else:
+            self.destroy_bullet()
+
+    def update(self):
+        if self.player.throws:
+            self.move_bullet()
+
+    def destroy_bullet(self):
+        self.player.throws = False
+        if self.collision:
+            self.collision[0].kill_monster()
+        self.kill()
+        

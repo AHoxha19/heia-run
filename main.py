@@ -11,13 +11,12 @@ class Game:
     def __init__(self):
         pg.init()
         pg.mixer.init()
-        pg.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
         self.screen = pg.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
         self.backgrounds = list()
-        self.world_number = 3
+        self.world_number = 1
         
         self.load_backgrounds()
         self.blocks = self.backgrounds[self.world_number].load_blocks(self)
@@ -75,9 +74,12 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_UP:
                     self.player.jump()
+                if event.key == pg.K_SPACE:
+                    self.player.throw_bullet()    
             if event.type == pg.KEYUP:
                 if event.key == pg.K_UP:
-                    self.player.jump_cut()   
+                    self.player.jump_cut()
+             
 
     def draw(self):
         # Game loop - draw
@@ -108,10 +110,22 @@ class Game:
         xprog_text = font.render('xprog: '+ str(round(self.x_progression, 2)), True, WHITE, BLACK)
         xprog_text_rect = fps_text.get_rect()
         xprog_text_rect.topleft = (0, 60)
+        player_pos_x_text = font.render('playerX: '+ str(round(self.player.pos.x, 2)), True, WHITE, BLACK)
+        player_pos_x_text_rect = fps_text.get_rect()
+        player_pos_x_text_rect.topleft = (0, 80)
+        stagew_text = font.render('STAGEW: '+ str(round(STAGE_WIDTH, 2)), True, WHITE, BLACK)
+        stagew_text_rect = fps_text.get_rect()
+        stagew_text_rect.topleft = (0, 100)
+        displayw_text = font.render('DISPLAYW: '+ str(round(DISPLAY_WIDTH, 2)), True, WHITE, BLACK)
+        displayw_text_rect = fps_text.get_rect()
+        displayw_text_rect.topleft = (0, 120)
         self.screen.blit(acc_text, acc_text_rect)
         self.screen.blit(vel_text, vel_text_rect)
         self.screen.blit(fps_text, fps_text_rect)
         self.screen.blit(xprog_text, xprog_text_rect)
+        self.screen.blit(player_pos_x_text, player_pos_x_text_rect)
+        self.screen.blit(stagew_text, stagew_text_rect)
+        self.screen.blit(displayw_text, displayw_text_rect)
 
 game = Game()
 game.show_menu_title()
