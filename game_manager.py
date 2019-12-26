@@ -1,5 +1,5 @@
 class GameManager:
-      world_number = 1
+      world_number = 0
       reset = False
 
 

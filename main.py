@@ -20,7 +20,6 @@ class Game:
         self.end_level = list()
         
         self.world_number = GameManager.world_number
-        print(self.world_number)
         self.x_progression = 0
         self.load_backgrounds()
         self.end_level.append(self.backgrounds[self.world_number].end_sign)
@@ -60,8 +59,6 @@ class Game:
         for block in self.blocks:
             if not block.isHole:
                 self.all_sprites.add(block)
-
-        
         self.run()
 
     def run(self):

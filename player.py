@@ -1,6 +1,7 @@
 # Sprite classes for platform game
 import pygame as pg
 from settings import *
+from game_manager import *
 vec = pg.math.Vector2
 
 
@@ -89,24 +90,29 @@ class Player(pg.sprite.Sprite):
         '''There is a display and a stage area
         the display area is what we see and the stage area is the scrolling background behind       
         '''
+        #print("boss_fight: " + str(GameManager.is_boss_fight))
+        if not GameManager.world_number == BOSS_WORLD_NUMBER:
+            # if the player reaches the end of the stage
+            if self.pos.x >STAGE_WIDTH - self.player_center: self.pos.x = STAGE_WIDTH - self.player_center
+            # if the player goes to the beginning of the stage
+            if self.pos.x < self.player_center: self.pos.x = self.player_center
 
-        # if the player reaches the end of the stage
-        if self.pos.x >STAGE_WIDTH - self.player_center: self.pos.x = STAGE_WIDTH - self.player_center
-        # if the player goes to the beginning of the stage
-        if self.pos.x < self.player_center: self.pos.x = self.player_center
-
-        # if the player has not reached the middle of the display area
-        if self.pos.x < START_SCROLL_X: 
-            self.game.x_progression =  self.pos.x 
-        # if the player has reached the end of the stage and we don't need to scroll anymore    
-        elif self.pos.x > STAGE_WIDTH - START_SCROLL_X: 
-            self.game.x_progression = self.pos.x - STAGE_WIDTH + DISPLAY_WIDTH
-        # if the player is in the middle, so not at the end or the beginning of the stage
+            # if the player has not reached the middle of the display area
+            if self.pos.x < START_SCROLL_X: 
+                self.game.x_progression =  self.pos.x 
+            # if the player has reached the end of the stage and we don't need to scroll anymore    
+            elif self.pos.x > STAGE_WIDTH - START_SCROLL_X: 
+                self.game.x_progression = self.pos.x - STAGE_WIDTH + DISPLAY_WIDTH
+            # if the player is in the middle, so not at the end or the beginning of the stage
+            else:
+                self.game.x_progression = START_SCROLL_X
+                self.world.stage_pos_x += -self.vel.x
+            
+            self.rect.midbottom = vec(self.game.x_progression, self.pos.y)
         else:
-            self.game.x_progression = START_SCROLL_X
-            self.world.stage_pos_x += -self.vel.x
-          
-        self.rect.midbottom = vec(self.game.x_progression, self.pos.y)
+            if self.pos.x > DISPLAY_WIDTH - self.player_center: self.pos.x = DISPLAY_WIDTH - self.player_center
+            if self.pos.x < self.player_center: self.pos.x = self.player_center
+            self.rect.midbottom = self.pos
 
     def animate(self):
             now = pg.time.get_ticks()
