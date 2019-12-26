@@ -28,10 +28,12 @@ class Player(pg.sprite.Sprite):
         self.player_center = self.rect.width / 2
         self.world = game.backgrounds[game.world_number]
 
+
     def throw_bullet(self):
         if not self.throws: 
             self.bullet = Bullet(self.game, self)
             self.throws = True
+            self.game.bullet_snd.play()
     def get_image(self, path, img_name):
         return pg.transform.scale(pg.image.load(path + img_name).convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
 
@@ -53,6 +55,7 @@ class Player(pg.sprite.Sprite):
         if self.pos.y == DISPLAY_HEIGHT - BLOCK_HEIGHT and not self.jumping:
             self.jumping = True
             self.vel.y = -PLAYER_JUMP
+            self.game.jump_snd.play()
 
     def jump_cut(self):
         if self.jumping:
@@ -147,7 +150,6 @@ class Bullet(pg.sprite.Sprite):
         self.rect.center = self.player.rect.center
             
     def move_bullet(self):
-        
         self.collision = pg.sprite.spritecollide(self, self.game.monsters, False)
         if not self.collision and (self.rect.x < DISPLAY_WIDTH and self.rect.x > 0):
                if self.last_player_vel_x < 0:

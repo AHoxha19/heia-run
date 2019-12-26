@@ -38,4 +38,5 @@ IMG_BLOCK_PATH = './img/blocks/'
 IMG_PLAYER_PATH = './img/player/'
 IMG_BULLET_PATH = './img/bullets/'
 IMG_MONSTER_PATH = './img/monsters/'
+SND_PATH = './sounds/'
 

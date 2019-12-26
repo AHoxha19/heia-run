@@ -11,18 +11,21 @@ class World:
         self.background_width = round((DISPLAY_HEIGHT / loaded_image.get_height()) * loaded_image.get_width())
         self.repeat = game_width > self.background_width
         self.image = pg.transform.scale(loaded_image, (self.background_width, DISPLAY_HEIGHT))
-        self.world_to_block = dict()
-        self.world_to_block[0] = 'hole'
-        self.world_to_block[1] = 'forest_grass.png'
-        self.world_to_block[2] = 'forest_grass.png'
-        self.world_to_block[3] = 'snow_grass.png'
-        self.world_to_block[4] = 'hole'
+        self.world_to_block_and_snd = dict()
+        self.world_to_block_and_snd[0] = ('hole', 'cave.ogg')
+        self.world_to_block_and_snd[1] = ('forest_grass.png', 'forest.mp3')
+        self.world_to_block_and_snd[2] = ('forest_grass.png', 'mountain.wav')
+        self.world_to_block_and_snd[3] = ('snow_grass.png', 'snow.ogg')
+        self.world_to_block_and_snd[4] = ('hole', 'boss.wav')
         self.stage_pos_x = 0
+        
 
 
     def load_blocks(self, game):
-        return Block.create_all_blocks(game, self.world_to_block[game.world_number])
+        return Block.create_all_blocks(game, self.world_to_block_and_snd[game.world_number][0])
         
+    def load_world_music(self, game):
+        return self.world_to_block_and_snd[game.world_number][1]
 
     def draw(self, game):
         rel_x = self.stage_pos_x % self.background_width

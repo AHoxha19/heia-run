@@ -11,16 +11,27 @@ class Game:
     def __init__(self):
         pg.init()
         pg.mixer.init()
+        self.load_sounds_effect()
         self.screen = pg.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
         self.backgrounds = list()
-        self.world_number = 1
-        
+        self.world_number = 2
+
+        self.x_progression = 0
         self.load_backgrounds()
         self.blocks = self.backgrounds[self.world_number].load_blocks(self)
-        self.x_progression = 0
+        self.music = self.backgrounds[self.world_number].load_world_music(self)
+        pg.mixer.music.load(SND_PATH + self.music)
+        
+        pg.mixer.music.play(-1)
+        pg.mixer.music.set_volume(0.3)
+        
+
+    def load_sounds_effect(self):
+        self.jump_snd = pg.mixer.Sound(SND_PATH + "jump.wav")
+        self.bullet_snd = pg.mixer.Sound(SND_PATH + "bullet.wav")
 
     def get_current_bg(self):
         return self.backgrounds[self.world_number]
@@ -45,6 +56,8 @@ class Game:
         for block in self.blocks:
             if not block.isHole:
                 self.all_sprites.add(block)
+
+        
         self.run()
 
     def run(self):
@@ -55,6 +68,7 @@ class Game:
             self.update()
             self.draw()
             self.clock.tick(FPS)
+                   
 
     def update(self):
         # Game loop - update
