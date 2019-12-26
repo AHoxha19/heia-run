@@ -7,13 +7,13 @@ START_SCROLL_X = DISPLAY_WIDTH / 2
 FPS = 60
 
 #Player properties
-PLAYER_ACC = 1
+PLAYER_ACC = 10
 PLAYER_FRICTION = -0.12
 PLAYER_GRAV = 0.98
-PLAYER_JUMP = 20 #velocity the player jump 
+PLAYER_JUMP = 20 #velocity when the player jump 
 PLAYER_SMALL_JUMP = 5 #velocity if we release the K_UP early
-#Sprite
 
+#Sprite properties 
 PLAYER_WIDTH = 80 
 PLAYER_HEIGHT = 80 
 
@@ -34,6 +34,7 @@ BLOCK_HEIGHT = 79
 HOLES_PROB = 10 # percent
 
 #Paths
+IMG_PATH = './img/'
 IMG_BLOCK_PATH = './img/blocks/'
 IMG_PLAYER_PATH = './img/player/'
 IMG_BULLET_PATH = './img/bullets/'

@@ -14,7 +14,6 @@ class Block(pg.sprite.Sprite):
             self.image = pg.transform.scale(self.image, (BLOCK_WIDTH, BLOCK_HEIGHT))
             self.rect = self.image.get_rect()
             self.pos_in_game = vec(x_pos, DISPLAY_HEIGHT)
-            print(self.pos_in_game.x - self.game.x_progression)
             self.pos = vec(-500, DISPLAY_HEIGHT)
         else:
             self.image = pg.Surface((BLOCK_WIDTH, BLOCK_HEIGHT))

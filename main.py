@@ -1,11 +1,11 @@
 import random
+from game_manager import *
 from settings import *
 import pygame as pg
 from player import *
 from monster import *
 from world import *
 from block import *
-
 
 class Game:
     def __init__(self):
@@ -17,12 +17,15 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
         self.backgrounds = list()
-        self.world_number = 2
-
+        self.end_level = list()
+        
+        self.world_number = GameManager.world_number
+        print(self.world_number)
         self.x_progression = 0
         self.load_backgrounds()
-        self.blocks = self.backgrounds[self.world_number].load_blocks(self)
-        self.music = self.backgrounds[self.world_number].load_world_music(self)
+        self.end_level.append(self.backgrounds[self.world_number].end_sign)
+        self.blocks = self.backgrounds[self.world_number].load_blocks()
+        self.music = self.backgrounds[self.world_number].load_world_music()
         pg.mixer.music.load(SND_PATH + self.music)
         
         pg.mixer.music.play(-1)
@@ -37,14 +40,14 @@ class Game:
         return self.backgrounds[self.world_number]
 
     def load_backgrounds(self):
-        self.backgrounds.append(World(path='img/bg/biblio.png', game_width=STAGE_WIDTH))
-        self.backgrounds.append(World(path='img/bg/forest.png', game_width=STAGE_WIDTH))
-        self.backgrounds.append(World(path='img/bg/mountain.png', game_width=STAGE_WIDTH))
-        self.backgrounds.append(World(path='img/bg/snow.png', game_width=STAGE_WIDTH))
-        self.backgrounds.append(World(path='img/bg/city.png', game_width=STAGE_WIDTH))
+        self.backgrounds.append(World(path='img/bg/biblio.png', game_width=STAGE_WIDTH, game=self))
+        self.backgrounds.append(World(path='img/bg/forest.png', game_width=STAGE_WIDTH, game=self))
+        self.backgrounds.append(World(path='img/bg/mountain.png', game_width=STAGE_WIDTH, game=self))
+        self.backgrounds.append(World(path='img/bg/snow.png', game_width=STAGE_WIDTH, game=self))
+        self.backgrounds.append(World(path='img/bg/city.png', game_width=STAGE_WIDTH, game=self))
 
     def draw_background(self):
-        self.backgrounds[self.world_number].draw(self)
+        self.backgrounds[self.world_number].draw()
 
     def new(self):
         # starts a new game
@@ -53,6 +56,7 @@ class Game:
         self.monsters = [Monster(self) for x in range(10)]
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.monsters)
+        self.all_sprites.add(self.backgrounds[self.world_number].end_sign)
         for block in self.blocks:
             if not block.isHole:
                 self.all_sprites.add(block)
@@ -74,6 +78,10 @@ class Game:
         # Game loop - update
         self.all_sprites.update()
         hits=pg.sprite.spritecollide(self.player, self.blocks, False)
+        next_level = pg.sprite.spritecollide(self.player, self.end_level, False)
+        if next_level:
+            self.playing = False
+            GameManager.reset = True
         if hits:
           self.player.pos.y = DISPLAY_HEIGHT - BLOCK_HEIGHT
           self.player.vel.y = 0
@@ -85,6 +93,7 @@ class Game:
             if event.type == pg.QUIT:
                 self.playing = False
                 self.running = False
+                GameManager.reset = False
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_UP:
                     self.player.jump()
@@ -99,7 +108,7 @@ class Game:
         # Game loop - draw
         self.draw_background()
         self.all_sprites.draw(self.screen)
-        self.show_test_stats()
+        
         # after we draw everything, flip the display
         # sample with whiteboard
         pg.display.flip()
@@ -146,6 +155,9 @@ game.show_menu_title()
 while game.running:
     game.new()
     game.run()
+    if GameManager.reset:
+        GameManager.world_number+=1
+        game = Game()
     game.show_go_screen()
 
 pg.quit()
