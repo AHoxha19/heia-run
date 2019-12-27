@@ -10,7 +10,7 @@ class Monster(pg.sprite.Sprite):
     def __init__(self, game):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        print("yes")
+        self.collision_with_player = False
         self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'bapst.png').convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
         self.rect = self.image.get_rect()
         self.rect.center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2)

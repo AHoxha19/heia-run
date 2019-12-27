@@ -15,9 +15,16 @@ class Player(pg.sprite.Sprite):
         self.load_images()
         self.image = self.standing_frame
         self.rect = self.image.get_rect()
-        self.rect.center = (DISPLAY_WIDTH / 2 - 100, DISPLAY_HEIGHT / 2)
-
+        self.lifes = list()
         
+        next_life_pos_x = 0
+        for life in range(GameManager.number_of_lifes):
+            self.lifes.append(Life(LIFE_POS_X + next_life_pos_x, LIFE_POS_Y))
+            next_life_pos_x += 40
+        self.number_of_lifes = GameManager.number_of_lifes
+        self.rect.center = (DISPLAY_WIDTH / 2 - 100, DISPLAY_HEIGHT / 2)
+        
+    
         self.throws = False
 
         # position, velocity,acceleration and movement of the player
@@ -90,7 +97,6 @@ class Player(pg.sprite.Sprite):
         '''There is a display and a stage area
         the display area is what we see and the stage area is the scrolling background behind       
         '''
-        #print("boss_fight: " + str(GameManager.is_boss_fight))
         if not GameManager.world_number == BOSS_WORLD_NUMBER:
             # if the player reaches the end of the stage
             if self.pos.x >STAGE_WIDTH - self.player_center: self.pos.x = STAGE_WIDTH - self.player_center
@@ -142,6 +148,16 @@ class Player(pg.sprite.Sprite):
             if not self.jumping and not self.walking:
                 self.image = self.standing_frame
                 self.rect = self.image.get_rect()            
+
+class Life(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.transform.scale(pg.image.load(IMG_PLAYER_PATH + 'life.png'), (LIFE_WIDTH, LIFE_HEIGHT))
+        self.rect = self.image.get_rect()
+        self.pos = vec(x, y)
+        self.rect = self.pos
+
+
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self, game, player):

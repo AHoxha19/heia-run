@@ -18,7 +18,6 @@ class Game:
         self.running = True
         self.backgrounds = list()
         self.end_level = list()
-        
         self.world_number = GameManager.world_number
         self.x_progression = 0
         self.load_backgrounds()
@@ -34,6 +33,7 @@ class Game:
     def load_sounds_effect(self):
         self.jump_snd = pg.mixer.Sound(SND_PATH + "jump.wav")
         self.bullet_snd = pg.mixer.Sound(SND_PATH + "bullet.wav")
+        self.hit_snd = pg.mixer.Sound(SND_PATH + "hit.ogg")
 
     def get_current_bg(self):
         return self.backgrounds[self.world_number]
@@ -52,10 +52,16 @@ class Game:
         # starts a new game
         self.all_sprites = pg.sprite.Group()
         self.player = Player(self)
-        self.monsters = [Monster(self) for x in range(10)]
+        self.monsters = pg.sprite.Group()
+        for i in range(10):
+            monster = Monster(self)
+            self.all_sprites.add(monster)
+            self.monsters.add(monster)
+        [Monster(self) for x in range(10)]
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.monsters)
         self.all_sprites.add(self.backgrounds[self.world_number].end_sign)
+        self.all_sprites.add(self.player.lifes)
         for block in self.blocks:
             if not block.isHole:
                 self.all_sprites.add(block)
@@ -76,13 +82,24 @@ class Game:
         self.all_sprites.update()
         hits=pg.sprite.spritecollide(self.player, self.blocks, False)
         next_level = pg.sprite.spritecollide(self.player, self.end_level, False)
+        player_monster_coll = pg.sprite.spritecollide(self.player, self.monsters, True)
         if next_level:
             self.playing = False
+            GameManager.next_level = True
             GameManager.reset = True
         if hits:
           self.player.pos.y = DISPLAY_HEIGHT - BLOCK_HEIGHT
           self.player.vel.y = 0
           self.player.jumping = False
+        if player_monster_coll:
+                self.hit_snd.play()
+                self.player.number_of_lifes -= 1
+                self.player.lifes[self.player.number_of_lifes].kill()
+                self.player.lifes.pop(self.player.number_of_lifes) 
+                if self.player.number_of_lifes <= 1:
+                    self.playing = False 
+                    GameManager.reset = True
+            
 
     def events(self):
         # Game loop - events
@@ -152,8 +169,10 @@ game.show_menu_title()
 while game.running:
     game.new()
     game.run()
-    if GameManager.reset:
+    if GameManager.next_level:
         GameManager.world_number+=1
+    if GameManager.reset:
+        GameManager.next_level = False
         game = Game()
     game.show_go_screen()
 

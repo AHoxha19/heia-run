@@ -9,8 +9,8 @@ BOSS_WORLD_NUMBER = 4
 WORLD_WITH_TRANSPARENT_BLOCKS = 0
 
 #Player properties
-PLAYER_ACC = 1
-PLAYER_FRICTION = -0.12
+PLAYER_ACC = 5
+PLAYER_FRICTION = -0.15
 PLAYER_GRAV = 0.98
 PLAYER_JUMP = 20 #velocity when the player jump 
 PLAYER_SMALL_JUMP = 5 #velocity if we release the K_UP early
@@ -18,6 +18,11 @@ PLAYER_SMALL_JUMP = 5 #velocity if we release the K_UP early
 #Sprite properties 
 PLAYER_WIDTH = 80 
 PLAYER_HEIGHT = 80 
+
+LIFE_WIDTH = 30
+LIFE_HEIGHT = 30
+LIFE_POS_X = 10
+LIFE_POS_Y = 8
 
 BULLET_WIDTH = 20
 BULLET_HEIGHT = 20
