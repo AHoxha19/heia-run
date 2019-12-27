@@ -9,15 +9,19 @@ BOSS_WORLD_NUMBER = 4
 WORLD_WITH_TRANSPARENT_BLOCKS = 0
 
 #Player properties
-PLAYER_ACC = 5
+PLAYER_ACC = 1
 PLAYER_FRICTION = -0.15
 PLAYER_GRAV = 0.98
 PLAYER_JUMP = 20 #velocity when the player jump 
 PLAYER_SMALL_JUMP = 5 #velocity if we release the K_UP early
+PLAYER_HOLE_KILL = 455
 
 #Sprite properties 
-PLAYER_WIDTH = 80 
+PLAYER_WIDTH = 60
 PLAYER_HEIGHT = 80 
+
+SIGN_WIDTH = 79
+SIGN_HEIGHT = 79
 
 LIFE_WIDTH = 30
 LIFE_HEIGHT = 30
@@ -36,7 +40,7 @@ BLUE = (0,0,255)
 YELLOW = (255,255,0)
 
 #Blocks properties
-BLOCK_WIDTH = 79
+BLOCK_WIDTH = 150
 BLOCK_HEIGHT = 79
 HOLES_PROB = 10 # percent
 

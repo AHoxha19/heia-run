@@ -26,6 +26,7 @@ class Monster(pg.sprite.Sprite):
                 self.pos_in_game -= (1, 0)
                 self.pos.x = self.pos_in_game.x - self.game.player.pos.x
                 self.rect.center = self.pos
+                pg.draw.rect(self.image, YELLOW, self.rect)
             else:
                 self.kill()    
             

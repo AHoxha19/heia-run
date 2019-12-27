@@ -15,6 +15,9 @@ class Player(pg.sprite.Sprite):
         self.load_images()
         self.image = self.standing_frame
         self.rect = self.image.get_rect()
+        self.rect.width = 10
+        self.rect_test = self.rect
+        self.rect_test.width = 10
         self.lifes = list()
         
         next_life_pos_x = 0

@@ -80,6 +80,12 @@ class Game:
     def update(self):
         # Game loop - update
         self.all_sprites.update()
+
+        #if the player falls in a hole
+        if self.player.pos.y > PLAYER_HOLE_KILL:
+            self.playing = False 
+            GameManager.reset = True
+
         hits=pg.sprite.spritecollide(self.player, self.blocks, False)
         next_level = pg.sprite.spritecollide(self.player, self.end_level, False)
         player_monster_coll = pg.sprite.spritecollide(self.player, self.monsters, True)
@@ -122,7 +128,6 @@ class Game:
         # Game loop - draw
         self.draw_background()
         self.all_sprites.draw(self.screen)
-        
         # after we draw everything, flip the display
         # sample with whiteboard
         pg.display.flip()
@@ -147,7 +152,7 @@ class Game:
         xprog_text = font.render('xprog: '+ str(round(self.x_progression, 2)), True, WHITE, BLACK)
         xprog_text_rect = fps_text.get_rect()
         xprog_text_rect.topleft = (0, 60)
-        player_pos_x_text = font.render('playerX: '+ str(round(self.player.pos.x, 2)), True, WHITE, BLACK)
+        player_pos_x_text = font.render('playerY: '+ str(round(self.player.pos.y, 2)), True, WHITE, BLACK)
         player_pos_x_text_rect = fps_text.get_rect()
         player_pos_x_text_rect.topleft = (0, 80)
         stagew_text = font.render('STAGEW: '+ str(round(STAGE_WIDTH, 2)), True, WHITE, BLACK)

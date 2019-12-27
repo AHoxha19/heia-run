@@ -41,7 +41,7 @@ class EndSign(pg.sprite.Sprite):
         self.pos_in_game = vec(STAGE_WIDTH, DISPLAY_HEIGHT - BLOCK_HEIGHT)
         self.pos = vec(-500, DISPLAY_HEIGHT - BLOCK_HEIGHT)
         self.image = pg.image.load(IMG_PATH + 'signpost.png')
-        self.image = pg.transform.scale(self.image, (BLOCK_WIDTH, BLOCK_HEIGHT))
+        self.image = pg.transform.scale(self.image, (SIGN_WIDTH, SIGN_HEIGHT))
         self.rect = self.image.get_rect()
         self.rect.center = self.pos_in_game
         
