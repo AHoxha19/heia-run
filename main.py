@@ -19,6 +19,7 @@ class Game:
         self.backgrounds = list()
         self.end_level = list()
         self.world_number = GameManager.world_number
+        self.is_boss_fight = GameManager.world_number == BOSS_WORLD_NUMBER
         self.x_progression = 0
         self.load_backgrounds()
         self.end_level.append(self.backgrounds[self.world_number].end_sign)
@@ -53,13 +54,16 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.player = Player(self)
         self.monsters = pg.sprite.Group()
-        for i in range(10):
-            monster = Monster(self)
-            self.all_sprites.add(monster)
-            self.monsters.add(monster)
-        [Monster(self) for x in range(10)]
+        if self.is_boss_fight:
+            self.monster = Monster(self, self.is_boss_fight)
+            self.all_sprites.add(self.monster)
+            self.monsters.add(self.monster)
+        else:
+            for i in range(NB_OF_MONSTERS):
+                monster = Monster(self, self.is_boss_fight)
+                self.all_sprites.add(monster)
+                self.monsters.add(monster)
         self.all_sprites.add(self.player)
-        self.all_sprites.add(self.monsters)
         self.all_sprites.add(self.backgrounds[self.world_number].end_sign)
         self.all_sprites.add(self.player.lifes)
         for block in self.blocks:
@@ -86,26 +90,24 @@ class Game:
             self.playing = False 
             GameManager.reset = True
 
-        hits=pg.sprite.spritecollide(self.player, self.blocks, False)
+        block_hit=pg.sprite.spritecollide(self.player, self.blocks, False)
         next_level = pg.sprite.spritecollide(self.player, self.end_level, False)
-        player_monster_coll = pg.sprite.spritecollide(self.player, self.monsters, True)
+        player_monster_coll = pg.sprite.spritecollide(self.player, self.monsters, not self.is_boss_fight)
         if next_level:
             self.playing = False
             GameManager.next_level = True
             GameManager.reset = True
-        if hits:
+        if block_hit:
           self.player.pos.y = DISPLAY_HEIGHT - BLOCK_HEIGHT
           self.player.vel.y = 0
           self.player.jumping = False
         if player_monster_coll:
                 self.hit_snd.play()
-                self.player.number_of_lifes -= 1
-                self.player.lifes[self.player.number_of_lifes].kill()
-                self.player.lifes.pop(self.player.number_of_lifes) 
-                if self.player.number_of_lifes <= 1:
-                    self.playing = False 
-                    GameManager.reset = True
-            
+                if self.is_boss_fight:
+                    player_monster_coll[0].boss_update()
+                else:
+                    self.player.remove_life()
+                 
 
     def events(self):
         # Game loop - events
@@ -122,7 +124,6 @@ class Game:
             if event.type == pg.KEYUP:
                 if event.key == pg.K_UP:
                     self.player.jump_cut()
-             
 
     def draw(self):
         # Game loop - draw

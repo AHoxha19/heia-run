@@ -2,6 +2,8 @@
 import pygame as pg
 from settings import *
 from game_manager import *
+from player_bullet import *
+from life import *
 vec = pg.math.Vector2
 
 
@@ -16,8 +18,6 @@ class Player(pg.sprite.Sprite):
         self.image = self.standing_frame
         self.rect = self.image.get_rect()
         self.rect.width = 10
-        self.rect_test = self.rect
-        self.rect_test.width = 10
         self.lifes = list()
         
         next_life_pos_x = 0
@@ -39,10 +39,18 @@ class Player(pg.sprite.Sprite):
         self.player_center = self.rect.width / 2
         self.world = game.backgrounds[game.world_number]
 
+    def remove_life(self):
+        self.number_of_lifes -= 1
+        self.lifes[self.number_of_lifes].kill()
+        self.lifes.pop(self.number_of_lifes) 
+        
+        if self.number_of_lifes <= 1:
+            self.game.playing = False 
+            GameManager.reset = True
 
     def throw_bullet(self):
         if not self.throws: 
-            self.bullet = Bullet(self.game, self)
+            self.bullet = PlayerBullet(self.game, self, self.game.is_boss_fight)
             self.throws = True
             self.game.bullet_snd.play()
     def get_image(self, path, img_name):
@@ -152,45 +160,3 @@ class Player(pg.sprite.Sprite):
                 self.image = self.standing_frame
                 self.rect = self.image.get_rect()            
 
-class Life(pg.sprite.Sprite):
-    def __init__(self, x, y):
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.transform.scale(pg.image.load(IMG_PLAYER_PATH + 'life.png'), (LIFE_WIDTH, LIFE_HEIGHT))
-        self.rect = self.image.get_rect()
-        self.pos = vec(x, y)
-        self.rect = self.pos
-
-
-
-class Bullet(pg.sprite.Sprite):
-    def __init__(self, game, player):
-        pg.sprite.Sprite.__init__(self)
-        self.game = game
-        self.player = player
-        self.last_player_vel_x = self.player.vel.x
-        self.image = pg.image.load(IMG_BULLET_PATH + 'bullet.gif').convert()
-        self.image = pg.transform.scale(self.image, (BULLET_WIDTH, BULLET_HEIGHT))
-        self.rect = self.image.get_rect()
-        self.game.all_sprites.add(self)
-        self.rect.center = self.player.rect.center
-            
-    def move_bullet(self):
-        self.collision = pg.sprite.spritecollide(self, self.game.monsters, False)
-        if not self.collision and (self.rect.x < DISPLAY_WIDTH and self.rect.x > 0):
-               if self.last_player_vel_x < 0:
-                    self.rect.x -= 10
-               else:
-                   self.rect.x += 10
-        else:
-            self.destroy_bullet()
-
-    def update(self):
-        if self.player.throws:
-            self.move_bullet()
-
-    def destroy_bullet(self):
-        self.player.throws = False
-        if self.collision:
-            self.collision[0].kill_monster()
-        self.kill()
-        
