@@ -52,7 +52,8 @@ class Player(pg.sprite.Sprite):
         if not self.throws: 
             self.bullet = PlayerBullet(self.game, self, self.game.is_boss_fight)
             self.throws = True
-            self.game.bullet_snd.play()
+            if not GameManager.mute:
+                self.game.bullet_snd.play()
     def get_image(self, path, img_name):
         return pg.transform.scale(pg.image.load(path + img_name).convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
 
@@ -74,7 +75,8 @@ class Player(pg.sprite.Sprite):
         if self.pos.y == DISPLAY_HEIGHT - BLOCK_HEIGHT and not self.jumping:
             self.jumping = True
             self.vel.y = -PLAYER_JUMP
-            self.game.jump_snd.play()
+            if not GameManager.mute:
+                self.game.jump_snd.play()
 
     def jump_cut(self):
         if self.jumping:

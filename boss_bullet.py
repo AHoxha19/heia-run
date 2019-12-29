@@ -28,9 +28,6 @@ class BossBullet(Bullet):
         
 
     def destroy_bullet(self):
-        self.game.monster.boss_lifes-=1
-        if self.game.monster.boss_lifes == 0:
-            self.collision[0].kill_monster()
         self.kill()
         
 
