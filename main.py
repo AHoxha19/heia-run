@@ -24,7 +24,7 @@ class Game:
         self.load_backgrounds()
         self.end_level.append(self.backgrounds[self.world_number].end_sign)
         self.blocks = self.backgrounds[self.world_number].load_blocks()
-        
+        GameManager.save_game()
         
         
     def play_music(self, music_name):
@@ -200,10 +200,12 @@ class Game:
                         if not GameManager.mute: self.menu_move.play()          
                        
                     if event.key == pg.K_RETURN:
-                        if select_pos == NEW_GAME_POS:                                                                   
+                        if select_pos == NEW_GAME_POS: 
+                            GameManager.world_number = 0                                                                  
                             click = True
                         elif select_pos == LOAD_GAME_POS:
-                            GameManager.load_game(self)
+                            GameManager.load_game()
+                            click = True
                         elif select_pos == SOUND_MUTE_POS:
                             sound_img = self.sound_img_toggle(is_sound_on)  
                             is_sound_on = not is_sound_on
@@ -252,8 +254,10 @@ class Game:
         self.screen.blit(stagew_text, stagew_text_rect)
         self.screen.blit(displayw_text, displayw_text_rect)
 
+GameManager.load_game()
 game = Game()
 game.show_menu_title()
+game = Game()
 while game.running:
     game.new()
     game.run()

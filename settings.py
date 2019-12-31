@@ -20,7 +20,7 @@ SOUND_MUTE_POS = (DISPLAY_WIDTH /2 -52, DISPLAY_HEIGHT /2 +138)
 SND_IMG_SIZE = (70,50)
 
 #Player properties
-PLAYER_ACC = 1
+PLAYER_ACC = 5
 PLAYER_FRICTION = -0.15
 PLAYER_GRAV = 0.98
 PLAYER_JUMP = 20 #velocity when the player jump 
