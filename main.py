@@ -25,8 +25,8 @@ class Game:
         self.end_level.append(self.backgrounds[self.world_number].end_sign)
         self.blocks = self.backgrounds[self.world_number].load_blocks()
         GameManager.save_game()
-        
-        
+
+
     def play_music(self, music_name):
         pg.mixer.music.load(SND_PATH + music_name)
         pg.mixer.music.play(-1)
@@ -55,8 +55,8 @@ class Game:
     def new(self):
         # starts a new game
         if not GameManager.mute:
-            self.music = self.backgrounds[self.world_number].load_world_music()        
-            self.play_music(self.music)   
+            self.music = self.backgrounds[self.world_number].load_world_music()
+            self.play_music(self.music)
         self.all_sprites = pg.sprite.Group()
         self.player = Player(self)
         self.monsters = pg.sprite.Group()
@@ -85,7 +85,7 @@ class Game:
             self.update()
             self.draw()
             self.clock.tick(FPS)
-                   
+
 
     def update(self):
         # Game loop - update
@@ -93,7 +93,7 @@ class Game:
 
         #if the player falls in a hole
         if self.player.pos.y > PLAYER_HOLE_KILL:
-            self.playing = False 
+            self.playing = False
             GameManager.reset = True
 
         block_hit=pg.sprite.spritecollide(self.player, self.blocks, False)
@@ -114,7 +114,7 @@ class Game:
                     player_monster_coll[0].boss_update()
                 else:
                     self.player.remove_life()
-                 
+
 
     def events(self):
         # Game loop - events
@@ -127,7 +127,7 @@ class Game:
                 if event.key == pg.K_UP:
                     self.player.jump()
                 if event.key == pg.K_SPACE:
-                    self.player.throw_bullet()    
+                    self.player.throw_bullet()
             if event.type == pg.KEYUP:
                 if event.key == pg.K_UP:
                     self.player.jump_cut()
@@ -153,11 +153,11 @@ class Game:
 
     def sound_img_toggle(self, is_sound_on):
         if is_sound_on:
-            return pg.transform.scale(pg.image.load(IMG_PATH + 'sound_mute.png').convert(), SND_IMG_SIZE)   
+            return pg.transform.scale(pg.image.load(IMG_PATH + 'sound_mute.png').convert(), SND_IMG_SIZE)
         return pg.transform.scale(pg.image.load(IMG_PATH + 'sound_on.gif').convert(), SND_IMG_SIZE)
 
     def show_menu_title(self):
-        self.music = 'main_menu.mp3'
+        self.music = 'main_menu.ogg'
         self.play_music(self.music)
         main_menu_image = pg.image.load(IMG_PATH + 'main_menu_bg.png').convert()
         main_menu_image = pg.transform.scale( main_menu_image, (DISPLAY_WIDTH, DISPLAY_HEIGHT))
@@ -167,10 +167,10 @@ class Game:
         select = self.select_rect()
 
         select_pos = NEW_GAME_POS
-        
+
         click = False
         while not click:
-            
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     click = True
@@ -185,8 +185,8 @@ class Game:
                             select_pos = NEW_GAME_POS
                         elif select_pos == SOUND_MUTE_POS:
                             select = self.select_rect()
-                            select_pos = LOAD_GAME_POS 
-                        if not GameManager.mute: self.menu_move.play()                  
+                            select_pos = LOAD_GAME_POS
+                        if not GameManager.mute: self.menu_move.play()
                     if event.key == pg.K_DOWN:
                         #Press down key
                         if select_pos == NEW_GAME_POS:
@@ -196,24 +196,24 @@ class Game:
                             select_pos = SOUND_MUTE_POS
                         elif select_pos == SOUND_MUTE_POS:
                             select = self.select_rect()
-                            select_pos = NEW_GAME_POS 
-                        if not GameManager.mute: self.menu_move.play()          
-                       
+                            select_pos = NEW_GAME_POS
+                        if not GameManager.mute: self.menu_move.play()
+
                     if event.key == pg.K_RETURN:
-                        if select_pos == NEW_GAME_POS: 
-                            GameManager.world_number = 0                                                                  
+                        if select_pos == NEW_GAME_POS:
+                            GameManager.world_number = 0
                             click = True
                         elif select_pos == LOAD_GAME_POS:
                             GameManager.load_game()
                             click = True
                         elif select_pos == SOUND_MUTE_POS:
-                            sound_img = self.sound_img_toggle(is_sound_on)  
+                            sound_img = self.sound_img_toggle(is_sound_on)
                             is_sound_on = not is_sound_on
-                            if not is_sound_on: 
+                            if not is_sound_on:
                                 pg.mixer.music.stop()
                                 GameManager.mute = True
-                            else: 
-                                self.play_music('main_menu.mp3')    
+                            else:
+                                self.play_music('main_menu.ogg')
                                 GameManager.mute = False
             self.screen.blit(main_menu_image, (0,0))
             self.screen.blit(sound_img, (DISPLAY_WIDTH /2 -50, DISPLAY_HEIGHT /2 +140))
@@ -224,7 +224,7 @@ class Game:
         pass
 
     def show_test_stats(self):
-        font = pg.font.Font('freesansbold.ttf', 20) 
+        font = pg.font.Font('freesansbold.ttf', 20)
         acc_text = font.render("acc: - x: " + str(round(self.player.acc.x, 2)) + " ; y: " + str(round(self.player.acc.y, 2)) , True, WHITE, BLACK)
         acc_text_rect = acc_text.get_rect()
         acc_text_rect.topleft = (0, 0)
