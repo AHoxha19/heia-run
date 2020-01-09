@@ -16,9 +16,13 @@ class Monster(pg.sprite.Sprite):
         if self.is_boss:
             self.last_throw_time = 0
             self.boss_lifes = BOSS_LIFES
-            self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'boss.png').convert(), (BOSS_WIDTH, BOSS_HEIGHT))
+            self.boss_images = [0] * 11
+            for i in range(1, 11):
+                img_path = IMG_BOSS_PATH + 'boss_' + str(i) + '.png'
+                self.boss_images[i] = pg.transform.scale(pg.image.load(img_path), (FINAL_BOSS_WIDTH, FINAL_BOSS_HEIGHT)).convert()
+            self.image = self.boss_images[self.boss_lifes]
         else:
-            self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'boss.png').convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
+            self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'monster_1.png').convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
         self.rect = self.image.get_rect()
 
         if self.is_boss:
@@ -32,6 +36,25 @@ class Monster(pg.sprite.Sprite):
             self.pos = vec(-200, DISPLAY_HEIGHT - 120)
             self.pos_in_game = vec(random.randint(0, self.game.get_current_bg().game_width), DISPLAY_HEIGHT / 2)
         self.is_killed = False
+
+    def loose_boss_life(self):
+        self.boss_lifes -= 1
+        self.image = self.boss_images[self.boss_lifes]
+
+    def boss_update(self):
+        self.loose_boss_life()
+        if self.boss_lifes == 0:
+            self.kill_monster()
+        if self.rect.x == BOSS_POS_X_RIGHT:
+            self.bullet.kill()
+            self.rect.x = BOSS_POS_X_LEFT
+        else:
+            self.bullet.kill()
+            self.rect.x = BOSS_POS_X_RIGHT
+        if self.boss_lifes > 0:
+            self.image = pg.transform.flip( self.image, True, False)
+        else:
+            self.game.congratulations_screen = True
 
     def update(self):
         #not GameManager.world_number == BOSS_WORLD_NUMBER

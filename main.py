@@ -1,4 +1,5 @@
 import random
+import sys
 from game_manager import *
 from settings import *
 import pygame as pg
@@ -125,9 +126,7 @@ class Game:
         # Game loop - events
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                self.playing = False
-                self.running = False
-                GameManager.reset = False
+                sys.exit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_UP:
                     self.player.jump()
@@ -191,8 +190,7 @@ class Game:
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    click = True
-                    self.running = False
+                    sys.exit()
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_UP:
                         ##Press up key

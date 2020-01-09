@@ -33,7 +33,7 @@ class PlayerBullet(Bullet):
         self.player.throws = False
         if self.collision_player_with_monster:
             if self.is_boss_fight:
-                self.game.monster.boss_lifes -= 1
+                self.game.monster.loose_boss_life()
                 if self.game.monster.boss_lifes == 0:
                      self.collision_player_with_monster[0].kill_monster()
                      self.game.congratulations_screen = True
