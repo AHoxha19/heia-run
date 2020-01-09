@@ -22,7 +22,7 @@ class Monster(pg.sprite.Sprite):
                 self.boss_images[i] = pg.transform.scale(pg.image.load(img_path), (FINAL_BOSS_WIDTH, FINAL_BOSS_HEIGHT)).convert()
             self.image = self.boss_images[self.boss_lifes]
         else:
-            self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'monster_1.png').convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
+            self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'monster_' + str(random.randint(1, 9)) + '.png').convert(), [MONSTER_WIDTH] * 2)
         self.rect = self.image.get_rect()
 
         if self.is_boss:
@@ -32,8 +32,8 @@ class Monster(pg.sprite.Sprite):
             # if GameManager.world_number == BOSS_WORLD_NUMBER:
             #     self.rect.center = (STAGE_WIDTH, DISPLAY_HEIGHT / 2)
             # else:
-            self.rect.center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT - 120)
-            self.pos = vec(-200, DISPLAY_HEIGHT - 120)
+            self.rect.center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT - MONSTER_GAME_POSITION)
+            self.pos = vec(-200, DISPLAY_HEIGHT - MONSTER_GAME_POSITION)
             self.pos_in_game = vec(random.randint(0, self.game.get_current_bg().game_width), DISPLAY_HEIGHT / 2)
         self.is_killed = False
 

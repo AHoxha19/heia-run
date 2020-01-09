@@ -278,6 +278,7 @@ class Game:
 GameManager.load_game()
 game = Game()
 game.show_menu_title()
+game = Game()
 
 while game.running:
     game.new()
