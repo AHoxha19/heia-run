@@ -7,6 +7,7 @@ class BossBullet(Bullet):
         Bullet.__init__(self, game, player)
         self.image = pg.image.load(IMG_BULLET_PATH + 'heia.png').convert()
         self.image = pg.transform.scale(self.image, (BOSS_BULLET_WIDTH, BOSS_BULLET_HEIGHT))
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.game.all_sprites.add(self)
         self.rect.center = (self.game.monster.rect.x, self.game.monster.rect.y + BOSS_BULLET_DOWN)

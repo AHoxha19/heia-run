@@ -20,9 +20,12 @@ class Monster(pg.sprite.Sprite):
             for i in range(1, 11):
                 img_path = IMG_BOSS_PATH + 'boss_' + str(i) + '.png'
                 self.boss_images[i] = pg.transform.scale(pg.image.load(img_path), (FINAL_BOSS_WIDTH, FINAL_BOSS_HEIGHT)).convert()
+                self.boss_images[i].set_colorkey(BLACK)
             self.image = self.boss_images[self.boss_lifes]
+            
         else:
             self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'monster_' + str(random.randint(1, 9)) + '.png').convert(), [MONSTER_WIDTH] * 2)
+            self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
 
         if self.is_boss:

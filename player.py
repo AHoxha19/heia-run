@@ -55,16 +55,27 @@ class Player(pg.sprite.Sprite):
             if not GameManager.mute:
                 self.game.bullet_snd.play()
     def get_image(self, path, img_name):
-        return pg.transform.scale(pg.image.load(path + img_name).convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
+        image = pg.transform.scale(pg.image.load(path + img_name).convert(), (PLAYER_WIDTH, PLAYER_HEIGHT))
+        image.set_colorkey(BLACK)
+        return image
 
     def load_images(self):
-        self.standing_frame = self.get_image(IMG_PLAYER_PATH, 'asterix_0.gif')
-        self.jump_frame_r = self.get_image(IMG_PLAYER_PATH, 'asterix_jump.gif')
+        self.standing_frame = self.get_image(IMG_PLAYER_PATH, 'player_0.png')
+        self.jump_frame_r = self.get_image(IMG_PLAYER_PATH, 'player_jump.png')
         self.jump_frame_l = pg.transform.flip(self.jump_frame_r, True, False)
-        self.walk_frame_r = [self.get_image(IMG_PLAYER_PATH, 'asterix_1.gif'),
-                           self.get_image(IMG_PLAYER_PATH, 'asterix_2.gif'),
-                           self.get_image(IMG_PLAYER_PATH, 'asterix_3.gif'),
-                           self.get_image(IMG_PLAYER_PATH, 'asterix_4.gif')
+        self.walk_frame_r = [self.get_image(IMG_PLAYER_PATH, 'player_1.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_2.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_3.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_4.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_5.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_6.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_7.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_8.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_9.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_10.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_11.png'),
+                           self.get_image(IMG_PLAYER_PATH, 'player_12.png')
+
                           ]
         self.walk_frame_l = []
         for frame in self.walk_frame_r:
@@ -150,7 +161,7 @@ class Player(pg.sprite.Sprite):
 
             #Walk animation
             if self.walking:
-                if now - self.last_update > 200:
+                if now - self.last_update > 50:
                     self.last_update = now
                     self.crt_frame = (self.crt_frame + 1) % self.walk_len
                     if self.vel.x > 0:
