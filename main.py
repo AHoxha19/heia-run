@@ -21,9 +21,11 @@ class Game:
         self.world_number = GameManager.world_number
         self.is_boss_fight = GameManager.world_number == BOSS_WORLD_NUMBER
         self.x_progression = 0
+        self.congratulations_screen = False
         self.load_backgrounds()
         self.end_level.append(self.backgrounds[self.world_number].end_sign)
         self.blocks = self.backgrounds[self.world_number].load_blocks()
+        self.is_main_menu = False
         GameManager.save_game()
 
 
@@ -86,7 +88,6 @@ class Game:
             self.draw()
             self.clock.tick(FPS)
 
-
     def update(self):
         # Game loop - update
         self.all_sprites.update()
@@ -94,6 +95,11 @@ class Game:
         #if the player falls in a hole
         if self.player.pos.y > PLAYER_HOLE_KILL:
             self.playing = False
+            GameManager.reset = True
+
+        if self.congratulations_screen:
+            self.playing = False
+            GameManager.next_level = True
             GameManager.reset = True
 
         block_hit=pg.sprite.spritecollide(self.player, self.blocks, False)
@@ -115,7 +121,6 @@ class Game:
                 else:
                     self.player.remove_life()
 
-
     def events(self):
         # Game loop - events
         for event in pg.event.get():
@@ -132,14 +137,27 @@ class Game:
                 if event.key == pg.K_UP:
                     self.player.jump_cut()
 
+    def draw_congratulations_screen(self):
+        self.congratulations_screen = True
+        pg.draw.rect(self.screen, BLACK, pg.Rect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT))
+        font = pg.font.Font('freesansbold.ttf', 32)
+        initial_y = (DISPLAY_HEIGHT // 2) - 20
+
+        for message in [CONGRATULATIONS_TEXT, CONGRATULATIONS_INFO]:
+            text = font.render(message, True, WHITE, BLACK)
+            textRect = text.get_rect()
+            textRect.center = (DISPLAY_WIDTH // 2, initial_y)
+            self.screen.blit(text, textRect)
+            initial_y += 40 # space between texts
+
     def draw(self):
         # Game loop - draw
+
         self.draw_background()
         self.all_sprites.draw(self.screen)
         # after we draw everything, flip the display
         # sample with whiteboard
         pg.display.flip()
-
 
     def select_circle(self):
         circle = pg.image.load(IMG_PATH + 'circle_selection.png')
@@ -199,6 +217,9 @@ class Game:
                             select_pos = NEW_GAME_POS
                         if not GameManager.mute: self.menu_move.play()
 
+                    if event.key == pg.K_SPACE:
+                        self.congratulations_screen = False
+
                     if event.key == pg.K_RETURN:
                         if select_pos == NEW_GAME_POS:
                             GameManager.world_number = 0
@@ -215,13 +236,14 @@ class Game:
                             else:
                                 self.play_music('main_menu.ogg')
                                 GameManager.mute = False
-            self.screen.blit(main_menu_image, (0,0))
-            self.screen.blit(sound_img, (DISPLAY_WIDTH /2 -50, DISPLAY_HEIGHT /2 +140))
-            self.screen.blit(select, select_pos)
-            pg.display.update()
 
-    def show_go_screen(self):
-        pass
+            if self.congratulations_screen:
+                self.draw_congratulations_screen()
+            else:
+                self.screen.blit(main_menu_image, (0,0))
+                self.screen.blit(sound_img, (DISPLAY_WIDTH /2 -50, DISPLAY_HEIGHT /2 +140))
+                self.screen.blit(select, select_pos)
+            pg.display.update()
 
     def show_test_stats(self):
         font = pg.font.Font('freesansbold.ttf', 20)
@@ -254,18 +276,22 @@ class Game:
         self.screen.blit(stagew_text, stagew_text_rect)
         self.screen.blit(displayw_text, displayw_text_rect)
 
+
 GameManager.load_game()
 game = Game()
 game.show_menu_title()
-game = Game()
+
 while game.running:
     game.new()
     game.run()
     if GameManager.next_level:
-        GameManager.world_number+=1
+        if game.congratulations_screen:
+            GameManager.load_game()
+            game.show_menu_title()
+        else:
+            GameManager.world_number += 1
     if GameManager.reset:
         GameManager.next_level = False
         game = Game()
-    game.show_go_screen()
 
 pg.quit()

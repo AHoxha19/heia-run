@@ -8,8 +8,10 @@ FPS = 60
 BOSS_WORLD_NUMBER = 4
 WORLD_WITH_TRANSPARENT_BLOCKS = 0
 NB_OF_MONSTERS = 10
-BOSS_LIFES = 10
+BOSS_LIFES = 1
 BOSS_TIME_THROW = 2000
+CONGRATULATIONS_TEXT = "Congratulations ! You won your bachelor !"
+CONGRATULATIONS_INFO = "Press space key to return to the main menu"
 
 #menu title options
 

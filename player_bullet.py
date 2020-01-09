@@ -24,20 +24,19 @@ class PlayerBullet(Bullet):
                 self.rect.x += BULLET_SPEED
         else:
             self.destroy_bullet()
-            
 
     def update(self):
-        if self.player.throws: 
+        if self.player.throws:
             self.move_bullet()
-        
 
     def destroy_bullet(self):
         self.player.throws = False
         if self.collision_player_with_monster:
             if self.is_boss_fight:
-                self.game.monster.boss_lifes-=1
+                self.game.monster.boss_lifes -= 1
                 if self.game.monster.boss_lifes == 0:
                      self.collision_player_with_monster[0].kill_monster()
+                     self.game.congratulations_screen = True
             else:
                  self.collision_player_with_monster[0].kill_monster()
         self.kill()
