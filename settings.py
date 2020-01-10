@@ -37,7 +37,7 @@ PLAYER_HOLE_KILL = 455
 #Blocks properties
 BLOCK_WIDTH = 150
 BLOCK_HEIGHT = 79
-HOLES_PROB = 10 # percent
+HOLES_PROB = 40 # percent
 
 #Sprite properties
 PLAYER_WIDTH = 60

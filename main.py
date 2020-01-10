@@ -76,7 +76,7 @@ class Game:
         self.all_sprites.add(self.backgrounds[self.world_number].end_sign)
         self.all_sprites.add(self.player.lifes)
         for block in self.blocks:
-            if not block.isHole:
+            if not block.is_hole:
                 self.all_sprites.add(block)
         self.run()
 
@@ -118,7 +118,7 @@ class Game:
                 if not GameManager.mute:
                     self.hit_snd.play()
                 if self.is_boss_fight:
-                    player_monster_coll[0].boss_update()
+                    player_monster_coll[0].loose_boss_life()
                 else:
                     self.player.remove_life()
 

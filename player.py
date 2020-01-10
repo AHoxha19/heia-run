@@ -19,15 +19,15 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.width = 10
         self.lifes = list()
-        
+
         next_life_pos_x = 0
         for life in range(GameManager.number_of_lifes):
             self.lifes.append(Life(LIFE_POS_X + next_life_pos_x, LIFE_POS_Y))
             next_life_pos_x += 40
         self.number_of_lifes = GameManager.number_of_lifes
         self.rect.center = (DISPLAY_WIDTH / 2 - 100, DISPLAY_HEIGHT / 2)
-        
-    
+
+
         self.throws = False
 
         # position, velocity,acceleration and movement of the player
@@ -42,14 +42,14 @@ class Player(pg.sprite.Sprite):
     def remove_life(self):
         self.number_of_lifes -= 1
         self.lifes[self.number_of_lifes].kill()
-        self.lifes.pop(self.number_of_lifes) 
-        
+        self.lifes.pop(self.number_of_lifes)
+
         if self.number_of_lifes <= 1:
-            self.game.playing = False 
+            self.game.playing = False
             GameManager.reset = True
 
     def throw_bullet(self):
-        if not self.throws: 
+        if not self.throws:
             self.bullet = PlayerBullet(self.game, self, self.game.is_boss_fight)
             self.throws = True
             if not GameManager.mute:
@@ -63,20 +63,8 @@ class Player(pg.sprite.Sprite):
         self.standing_frame = self.get_image(IMG_PLAYER_PATH, 'player_0.png')
         self.jump_frame_r = self.get_image(IMG_PLAYER_PATH, 'player_jump.png')
         self.jump_frame_l = pg.transform.flip(self.jump_frame_r, True, False)
-        self.walk_frame_r = [self.get_image(IMG_PLAYER_PATH, 'player_1.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_2.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_3.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_4.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_5.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_6.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_7.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_8.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_9.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_10.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_11.png'),
-                           self.get_image(IMG_PLAYER_PATH, 'player_12.png')
+        self.walk_frame_r = [self.get_image(IMG_PLAYER_PATH, 'player_' + str(i) + '.png') for i in range(1, 13)]
 
-                          ]
         self.walk_frame_l = []
         for frame in self.walk_frame_r:
             self.walk_frame_l.append(pg.transform.flip(frame, True, False))
@@ -105,18 +93,18 @@ class Player(pg.sprite.Sprite):
             self.acc.x = -PLAYER_ACC
         if keys[pg.K_RIGHT]:
             self.acc.x = PLAYER_ACC
-        
+
 
         # apply friction
         self.acc += self.vel * PLAYER_FRICTION
-        
+
         # equations of motion
         self.vel += 0.5 * self.acc
         #fix so that the player stops
         if abs(self.vel.x) < 0.1:
             self.vel.x = 0
         self.pos += self.vel
-        
+
 
         '''There is a display and a stage area
         the display area is what we see and the stage area is the scrolling background behind       
@@ -128,16 +116,16 @@ class Player(pg.sprite.Sprite):
             if self.pos.x < self.player_center: self.pos.x = self.player_center
 
             # if the player has not reached the middle of the display area
-            if self.pos.x < START_SCROLL_X: 
-                self.game.x_progression =  self.pos.x 
-            # if the player has reached the end of the stage and we don't need to scroll anymore    
-            elif self.pos.x > STAGE_WIDTH - START_SCROLL_X: 
+            if self.pos.x < START_SCROLL_X:
+                self.game.x_progression =  self.pos.x
+            # if the player has reached the end of the stage and we don't need to scroll anymore
+            elif self.pos.x > STAGE_WIDTH - START_SCROLL_X:
                 self.game.x_progression = self.pos.x - STAGE_WIDTH + DISPLAY_WIDTH
             # if the player is in the middle, so not at the end or the beginning of the stage
             else:
                 self.game.x_progression = START_SCROLL_X
                 self.world.stage_pos_x += -self.vel.x
-            
+
             self.rect.midbottom = vec(self.game.x_progression, self.pos.y)
         else:
             if self.pos.x > DISPLAY_WIDTH - self.player_center: self.pos.x = DISPLAY_WIDTH - self.player_center
@@ -157,7 +145,7 @@ class Player(pg.sprite.Sprite):
                     self.image = self.jump_frame_r
                 else:
                     self.image = self.jump_frame_l
-                self.rect = self.image.get_rect()    
+                self.rect = self.image.get_rect()
 
             #Walk animation
             if self.walking:
@@ -171,5 +159,5 @@ class Player(pg.sprite.Sprite):
                     self.rect = self.image.get_rect()
             if not self.jumping and not self.walking:
                 self.image = self.standing_frame
-                self.rect = self.image.get_rect()            
+                self.rect = self.image.get_rect()
 

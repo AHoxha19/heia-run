@@ -13,6 +13,8 @@ class Monster(pg.sprite.Sprite):
         self.game = game
         self.collision_with_player = False
         self.is_boss = is_boss
+        self.boss_time_throw = BOSS_TIME_THROW
+
         if self.is_boss:
             self.last_throw_time = 0
             self.boss_lifes = BOSS_LIFES
@@ -22,7 +24,7 @@ class Monster(pg.sprite.Sprite):
                 self.boss_images[i] = pg.transform.scale(pg.image.load(img_path), (FINAL_BOSS_WIDTH, FINAL_BOSS_HEIGHT)).convert()
                 self.boss_images[i].set_colorkey(BLACK)
             self.image = self.boss_images[self.boss_lifes]
-            
+
         else:
             self.image = pg.transform.scale(pg.image.load(IMG_MONSTER_PATH + 'monster_' + str(random.randint(1, 9)) + '.png').convert(), [MONSTER_WIDTH] * 2)
             self.image.set_colorkey(BLACK)
@@ -37,15 +39,13 @@ class Monster(pg.sprite.Sprite):
             # else:
             self.rect.center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT - MONSTER_GAME_POSITION)
             self.pos = vec(-200, DISPLAY_HEIGHT - MONSTER_GAME_POSITION)
-            self.pos_in_game = vec(random.randint(0, self.game.get_current_bg().game_width), DISPLAY_HEIGHT / 2)
+            self.pos_in_game = vec(random.randint(DISPLAY_WIDTH, self.game.get_current_bg().game_width), DISPLAY_HEIGHT / 2)
         self.is_killed = False
 
     def loose_boss_life(self):
         self.boss_lifes -= 1
-        self.image = self.boss_images[self.boss_lifes]
+        self.boss_time_throw -= 100
 
-    def boss_update(self):
-        self.loose_boss_life()
         if self.boss_lifes == 0:
             self.kill_monster()
         if self.rect.x == BOSS_POS_X_RIGHT:
@@ -55,7 +55,8 @@ class Monster(pg.sprite.Sprite):
             self.bullet.kill()
             self.rect.x = BOSS_POS_X_RIGHT
         if self.boss_lifes > 0:
-            self.image = pg.transform.flip( self.image, True, False)
+            self.image = self.boss_images[self.boss_lifes]
+            self.image = pg.transform.flip(self.image, True, False)
         else:
             self.game.congratulations_screen = True
 
@@ -81,7 +82,7 @@ class Monster(pg.sprite.Sprite):
 
     def boss_throws(self):
         now = pg.time.get_ticks()
-        if now - self.last_throw_time > BOSS_TIME_THROW:
+        if now - self.last_throw_time > self.boss_time_throw:
             self.last_throw_time = now
             self.bullet = BossBullet(self.game, self.game.player)
             if self.bullet.rect.x > DISPLAY_WIDTH or self.bullet.rect.x < 0:
